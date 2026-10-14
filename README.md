@@ -1,4 +1,4 @@
-# Product Data Copier
+# Product Copy Helper
 
 A userscript for copying product information from supported online shops in a clean, reusable format.
 
