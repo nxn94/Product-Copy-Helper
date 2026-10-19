@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Product-Copy-Helper
 // @namespace    nxn94_Product-Copy-Helper
-// @version      1.0.5
+// @version      1.0.6
 // @description  Copy the product title, link, or item number and price, including whether it's net or gross
 // @match        *://*.amazon.de/*
 // @match        *://*.ebay.de/*
+// @match        *://*.kaufland.de/*
 // @match        *://*.ipc-computer.de/*
 // @match        *://*.touchandscreen.de/*
 // @match        *://*.eetgroup.com/*
@@ -47,6 +48,7 @@
         'eetgroup.com': 'netto',
         'ebay.de': 'brutto',
         'ebay.com': 'brutto',
+        'kaufland.de': 'brutto',
         'ipc-computer.de': 'brutto',
         'touchandscreen.de': 'brutto',
         'smartpart4u.de': 'brutto',
@@ -71,6 +73,19 @@
         'ebay.': {
             title: ['h1.x-item-title__mainTitle span', 'h1.x-item-title__mainTitle', 'h1'],
             price: ['.x-price-primary span', '.x-price-section .ux-textspans', '[itemprop="price"]']
+        },
+        'kaufland.de': {
+            title: [
+                '[data-test="product-title"]',
+                'h1[data-test="product-title"]',
+                'main h1',
+                'h1'
+            ],
+            price: [
+                '[data-test="product-price"]',
+                '.pdp-price-information__price',
+                '[aria-label^="Preis:"]'
+            ]
         },
         'ipc-computer.de': {
             title: ['h1.product-detail-name', '.product-detail-name', 'h1'],
