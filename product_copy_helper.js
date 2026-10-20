@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Product-Copy-Helper
 // @namespace    nxn94_Product-Copy-Helper
-// @version      1.0.6
+// @version      1.0.7
 // @description  Copy the product title, link, or item number and price, including whether it's net or gross
 // @match        *://*.amazon.de/*
 // @match        *://*.ebay.de/*
@@ -96,8 +96,20 @@
             price: ['[itemprop="price"]', '.product--price', '.product-detail-price', '.price']
         },
         'eetgroup.com': {
-            title: ['[data-testid="product-title"]', '.product-title', 'h1'],
-            price: ['[data-testid="product-price"]', '[itemprop="price"]', '.product-price', '.price']
+            title: [
+                '[data-testid="product-title"]',
+                '[data-test="product-title"]',
+                '[itemprop="name"]',
+                '#app main h1',
+                '#app h1'
+            ],
+            price: [
+                '[data-testid="product-price"]',
+                '[data-test="product-price"]',
+                '[itemprop="price"]',
+                '.product-price',
+                '.price'
+            ]
         },
         'smartpart4u.de': {
             title: ['h1.product-detail-name', '.product-detail-name', 'h1'],
@@ -612,10 +624,147 @@
             : '';
     }
 
+    function isEetGroup() {
+        const hostname = location.hostname
+            .toLowerCase()
+            .replace(/^www\./, '');
+
+        return hostname === 'eetgroup.com' ||
+            hostname.endsWith('.eetgroup.com');
+    }
+
+    function isVisibleElement(element) {
+        if (!element) return false;
+
+        const style = window.getComputedStyle(element);
+        const rectangle = element.getBoundingClientRect();
+
+        return style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            Number(style.opacity || 1) !== 0 &&
+            rectangle.width > 0 &&
+            rectangle.height > 0;
+    }
+
+    function eetProductTitle() {
+        if (!isEetGroup()) return '';
+
+        /*
+         * EET is rendered dynamically and may contain headings belonging to
+         * recommendations or other product cards. Rank visible candidates
+         * and prefer the main product title in the primary content area.
+         */
+        const selectors = [
+            '[data-testid="product-title"]',
+            '[data-test="product-title"]',
+            '[itemprop="name"]',
+            '#app main h1',
+            '#app h1'
+        ];
+
+        const candidates = [];
+        const seenElements = new Set();
+
+        for (const selector of selectors) {
+            let elements;
+
+            try {
+                elements = document.querySelectorAll(selector);
+            } catch (error) {
+                continue;
+            }
+
+            for (const element of elements) {
+                if (seenElements.has(element)) continue;
+                seenElements.add(element);
+
+                const title = normalize(element.textContent);
+
+                if (
+                    title.length < 3 ||
+                    title.length > 500 ||
+                    !isVisibleElement(element)
+                ) {
+                    continue;
+                }
+
+                const unwantedContainer = element.closest([
+                    '[class*="recommend" i]',
+                    '[class*="alternative" i]',
+                    '[class*="accessor" i]',
+                    '[class*="related" i]',
+                    '[class*="similar" i]',
+                    '[class*="carousel" i]',
+                    '[class*="slider" i]',
+                    '[class*="product-card" i]',
+                    '[class*="productCard" i]',
+                    '[data-testid*="recommend" i]',
+                    '[data-testid*="alternative" i]',
+                    '[data-testid*="accessor" i]'
+                ].join(', '));
+
+                if (unwantedContainer) continue;
+
+                let score = 0;
+
+                if (element.matches([
+                    '[data-testid="product-title"]',
+                    '[data-test="product-title"]',
+                    '[itemprop="name"]'
+                ].join(', '))) {
+                    score += 100;
+                }
+
+                if (element.closest('main')) score += 40;
+                if (element.tagName.toLowerCase() === 'h1') score += 30;
+
+                if (element.closest([
+                    '[class*="product-detail" i]',
+                    '[class*="productDetail" i]',
+                    '[class*="product-info" i]',
+                    '[class*="productInfo" i]'
+                ].join(', '))) {
+                    score += 30;
+                }
+
+                candidates.push({
+                    title: title,
+                    score: score,
+                    order: candidates.length
+                });
+            }
+        }
+
+        if (candidates.length === 0) return '';
+
+        const uniqueCandidates = [];
+        const seenTitles = new Set();
+
+        for (const candidate of candidates) {
+            const key = candidate.title.toLowerCase();
+            if (seenTitles.has(key)) continue;
+
+            seenTitles.add(key);
+            uniqueCandidates.push(candidate);
+        }
+
+        uniqueCandidates.sort((a, b) => {
+            if (b.score !== a.score) return b.score - a.score;
+            return a.order - b.order;
+        });
+
+        return uniqueCandidates[0].title;
+    }
+
     function productTitle() {
         if (isAswo()) {
             const aswoTitle = aswoProductTitle();
             if (aswoTitle) return aswoTitle;
+        }
+
+        if (isEetGroup()) {
+            const eetTitle = eetProductTitle();
+            if (eetTitle) return eetTitle;
         }
 
         const shop = currentShop();
