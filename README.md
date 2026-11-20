@@ -1,12 +1,12 @@
 # Product Copy Helper
 
-A userscript for copying product information from supported online shops in a clean, reusable format.
-
 <p align="center">
-  <a href="https://raw.githubusercontent.com/nxn94/Product-Copy-Helper/refs/heads/main/product_copy_helper.js">
-    <img src="https://img.shields.io/badge/Add%20to-Violentmonkey-8800DD?style=for-the-badge&logo=violentmonkey&logoColor=white" alt="Add to Violentmonkey">
+  <a href="https://raw.githubusercontent.com/nxn94/Product-Copy-Helper/main/product_copy_helper.user.js">
+    <img src="https://img.shields.io/badge/Install-Add%20to%20Violentmonkey-8800DD?style=for-the-badge&logo=violentmonkey&logoColor=white" alt="Add to Violentmonkey">
   </a>
 </p>
+
+A userscript for copying product information from supported online shops in a clean, reusable format.
 
 The script adds a **Copy product** button to configured product pages and copies the following information:
 
