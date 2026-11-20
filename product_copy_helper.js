@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Product-Copy-Helper
 // @namespace    nxn94_Product-Copy-Helper
-// @version      1.0.7
+// @version      1.0.8
 // @description  Copy the product title, link, or item number and price, including whether it's net or gross
 // @match        *://*.amazon.de/*
 // @match        *://*.ebay.de/*
@@ -943,14 +943,18 @@
             };
         }
 
+        
         const ebayMatch = url.pathname.match(
             /\/itm\/(?:[^/]+\/)?(\d{9,15})(?:[/?]|$)/i
         );
-
+        
         if (ebayMatch && url.hostname.includes('ebay.')) {
             return {
                 type: 'Link',
-                value: url.origin + '/itm/' + ebayMatch[1]
+                value: url.origin + '/itm/' + ebayMatch[1] +
+                    (url.searchParams.has('var')
+                        ? '?var=' + encodeURIComponent(url.searchParams.get('var'))
+                        : '')
             };
         }
 
