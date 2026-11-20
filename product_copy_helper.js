@@ -925,7 +925,16 @@
         let url;
 
         try {
-            url = new URL(canonical && canonical.href ? canonical.href : location.href);
+            const isEbay = /(^|\.)ebay\./i.test(location.hostname);
+            const canonical = document.querySelector('link[rel="canonical"]');
+
+            // Bei eBay immer die tatsächliche Browser-URL verwenden,
+            // da der Canonical-Link den Variantenparameter var= entfernt.
+            url = new URL(
+                isEbay
+                    ? location.href
+                    : (canonical && canonical.href ? canonical.href : location.href)
+            );
         } catch (error) {
             return { type: 'Link', value: location.href };
         }
