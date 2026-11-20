@@ -127,7 +127,7 @@ The final article price is read preferentially from:
 
 1. Open the Violentmonkey dashboard.
 2. Create a new userscript.
-3. Copy the complete contents of `produktdaten-kopieren.user.js` into the editor.
+3. Copy the complete contents of `product_copy_helper.js` into the editor.
 4. Save the script.
 5. Reload the product page.
 
@@ -306,7 +306,7 @@ The userscript is plain JavaScript and does not require a build step.
 
 Recommended workflow:
 
-1. Edit `produktdaten-kopieren.user.js`.
+1. Edit `product_copy_helper.js`.
 2. Increase the `@version` value.
 3. Check the file for JavaScript syntax errors.
 4. Test at least one regular shop, Amazon, and ASWO.
@@ -315,7 +315,7 @@ Recommended workflow:
 Example syntax check with Node.js:
 
 ```bash
-node --check produktdaten-kopieren.user.js
+node --check product_copy_helper.js
 ```
 
 ## Suggested Repository Structure
@@ -323,7 +323,7 @@ node --check produktdaten-kopieren.user.js
 ```text
 .
 ├── README.md
-├── produktdaten-kopieren.user.js
+├── product_copy_helper.js
 ├── LICENSE
 └── CHANGELOG.md
 ```
