@@ -1,8 +1,11 @@
 // ==UserScript==
 // @name         Product-Copy-Helper
 // @namespace    nxn94_Product-Copy-Helper
-// @version      1.0.8
+// @version      1.0.9
 // @description  Copy the product title, link, or item number and price, including whether it's net or gross
+// @homepageURL  https://github.com/nxn94/Product-Copy-Helper
+// @downloadURL  https://raw.githubusercontent.com/nxn94/Product-Copy-Helper/main/product_copy_helper.js
+// @updateURL    https://raw.githubusercontent.com/nxn94/Product-Copy-Helper/main/product_copy_helper.js
 // @match        *://*.amazon.de/*
 // @match        *://*.ebay.de/*
 // @match        *://*.kaufland.de/*
