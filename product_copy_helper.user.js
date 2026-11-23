@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Product-Copy-Helper
 // @namespace    nxn94_Product-Copy-Helper
-// @version      1.0.9
+// @version      1.0.10
 // @description  Copy the product title, link, or item number and price, including whether it's net or gross
 // @homepageURL  https://github.com/nxn94/Product-Copy-Helper
 // @downloadURL  https://raw.githubusercontent.com/nxn94/Product-Copy-Helper/main/product_copy_helper.user.js
@@ -15,6 +15,7 @@
 // @match        *://*.smartpart4u.de/*
 // @match        *://*.accessoires-asus.com/*
 // @match        *://*.fixpart.de/*
+// @match        *://*.fixshop-online.de/*
 // @match        *://*.aswo.com/*
 // @grant        GM_setClipboard
 // @run-at       document-idle
@@ -56,7 +57,8 @@
         'touchandscreen.de': 'brutto',
         'smartpart4u.de': 'brutto',
         'accessoires-asus.com': 'brutto',
-        'fixpart.de': 'brutto'
+        'fixpart.de': 'brutto',
+        'fixshop-online.de': 'brutto'
     };
 
     const DEFAULT_TAX_TYPE = 'brutto';
@@ -125,6 +127,14 @@
         'fixpart.de': {
             title: ['[data-testid="product-title"]', '[itemprop="name"]', '.product-title', 'h1'],
             price: ['[data-testid="product-price"]', '[itemprop="price"]', '.product-price', '.price']
+        },
+        'fixshop-online.de': {
+            title: ['.product-info-main h1', '.page-title-wrapper h1', '[itemprop="name"]', 'h1'],
+            price: [
+                '.product-info-main .price-box .price',
+                '.product-info-main [itemprop="price"]',
+                '.product-info-main .price'
+            ]
         }
     };
 
