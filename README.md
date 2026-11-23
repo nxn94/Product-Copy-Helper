@@ -58,12 +58,14 @@ The script currently contains dedicated configuration for:
 
 - Amazon Germany
 - eBay Germany
+- Kaufland Germany
 - IPC-Computer
 - Touch and Screen
 - EET Group
 - Smartpart4u
 - Accessoires Asus
 - FixPart
+- FixShop
 - ASWO Shop
 
 Generic product metadata and common product selectors are used as fallbacks where appropriate.
@@ -127,7 +129,7 @@ The final article price is read preferentially from:
 
 1. Open the Violentmonkey dashboard.
 2. Create a new userscript.
-3. Copy the complete contents of `product_copy_helper.js` into the editor.
+3. Copy the complete contents of `product_copy_helper.user.js` into the editor.
 4. Save the script.
 5. Reload the product page.
 
@@ -161,12 +163,13 @@ const SHOP_TAX_TYPES = {
     'aswo.com': 'netto',
     'eetgroup.com': 'netto',
     'ebay.de': 'brutto',
-    'ebay.com': 'brutto',
+    'kaufland.de': 'brutto',
     'ipc-computer.de': 'brutto',
     'touchandscreen.de': 'brutto',
     'smartpart4u.de': 'brutto',
     'accessoires-asus.com': 'brutto',
-    'fixpart.de': 'brutto'
+    'fixpart.de': 'brutto',
+    'fixshop-online.de': 'brutto'
 };
 ```
 
@@ -306,7 +309,7 @@ The userscript is plain JavaScript and does not require a build step.
 
 Recommended workflow:
 
-1. Edit `product_copy_helper.js`.
+1. Edit `product_copy_helper.user.js`.
 2. Increase the `@version` value.
 3. Check the file for JavaScript syntax errors.
 4. Test at least one regular shop, Amazon, and ASWO.
@@ -315,7 +318,7 @@ Recommended workflow:
 Example syntax check with Node.js:
 
 ```bash
-node --check product_copy_helper.js
+node --check product_copy_helper.user.js
 ```
 
 ## Suggested Repository Structure
@@ -323,9 +326,8 @@ node --check product_copy_helper.js
 ```text
 .
 ├── README.md
-├── product_copy_helper.js
-├── LICENSE
-└── CHANGELOG.md
+├── product_copy_helper.user.js
+└── LICENSE
 ```
 
 ## Contributing
